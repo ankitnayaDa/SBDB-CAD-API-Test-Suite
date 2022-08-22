@@ -2,8 +2,6 @@
 
 
 copyFilesToServer(){
-   go get -v -u github.com/Srikrishnabh93/go-junit-report
-   cat FinalTestResult.log | go-junit-report > result.xml
    sleep 2
 
    echo "--------------------------------------------------"
@@ -14,8 +12,7 @@ copyFilesToServer(){
    echo "---------------------------------------------------"
 
    mkdir tmp_results
-   cp FinalTestResult.log tmp_results/
-   cp result.xml tmp_results/
+   mv test_report.html tmp_results/
    cd tmp_results
    echo "--------------------------------------------------"
    echo "Current working directory="`pwd`
@@ -26,7 +23,12 @@ copyFilesToServer(){
 }
 
 runGoTest(){
-    go test -v tests/* -p 1 2>&1 |  tee -a FinalTestResult.log
+    ls -ltr
+    go get -u github.com/vakenbolt/go-test-report/
+    cd tests/
+    ls -ltr
+    pwd
+    go test -json | go-test-report
 }
 
 runDocker() {
