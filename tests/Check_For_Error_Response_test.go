@@ -9,7 +9,7 @@ import (
 )
 
 func Test_Check_400_Response(t *testing.T) {
-	utils.LogInfo("Test description: Test for 400 bad request when request contained invalid keywords and/or content (details returned in the JSON payload)")
+	utils.LogInfo("Test description: Test for 400 bad response when request contained invalid keywords and/or content (details returned in the JSON payload)")
 	utils.LogInfo("***** Execution started *****")
 
 	CAD_API := types.CadAPI+"dist-max=10LD&date-min=2018-01-01&sort=dist&dist=10LD"
@@ -23,7 +23,7 @@ func Test_Check_400_Response(t *testing.T) {
 }
 
 func Test_Check_405_Response(t *testing.T) {
-	utils.LogInfo("Test description: the request used an incorrect method (see the HTTP Request section)")
+	utils.LogInfo("Test description: Verify 405 response when the request used an incorrect method (see the HTTP Request section)")
 	utils.LogInfo("***** Execution started *****")
 
 	CAD_API := types.CadAPI+"dist-max=10LD&date-min=2018-01-01&sort=dist"
