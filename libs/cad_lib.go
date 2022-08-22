@@ -5,6 +5,7 @@ import (
 	"SBDB-CAD-API-Test-Suite/utils"
 	"errors"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -25,8 +26,25 @@ func Get_All_Cad_For_Mars( API string) error {
 	return nil
 }
 
+func Get_Zero_Count_Results_Mars( API string) error {
+	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
+	if err != nil {
+		return err
+	}
+	var unmarshalledActualResponse types.CadApiResponse
+	if err := utils.JsonUnmarshal(resposebody, &unmarshalledActualResponse); err != nil {
+		return errors.New("Error in unmarshalling")
+	}
+	if unmarshalledActualResponse.Count == "0"{
+		return nil
+	} else {
+		return errors.New("Objects found in Mars Orbit")
+	}
+}
+
 //get all close-approach data for Mars
-func Get_Cad_For_Mars_Based_Date_Sort_Date( API string) error {
+func Get_Cad_Sort_Date( API string) error {
+	API = strings.Replace(API," ","%20",-1)
 	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
 	if err != nil {
 		return err
@@ -43,7 +61,8 @@ func Get_Cad_For_Mars_Based_Date_Sort_Date( API string) error {
 }
 
 //get all close-approach data for Mars
-func Get_Cad_For_Mars_Based_Distance_Sort_Distance( API string) error {
+func Get_Cad_Sort_Distance( API string) error {
+	API = strings.Replace(API," ","%20",-1)
 	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
 	if err != nil {
 		return err
@@ -55,9 +74,46 @@ func Get_Cad_For_Mars_Based_Distance_Sort_Distance( API string) error {
 	if unmarshalledActualResponse.Count == "0"{
 		return errors.New("No Objects found in Mars Orbit")
 	}
+	return CheckSortBasedOnDistance(unmarshalledActualResponse)
+}
+
+func Get_All_Cad_With_Limit( API string,limit string) error {
+	API = strings.Replace(API," ","%20",-1)
+	API = API + "&limit="+limit
+	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
+	if err != nil {
+		return err
+	}
+	var unmarshalledActualResponse types.CadApiResponse
+	if err := utils.JsonUnmarshal(resposebody, &unmarshalledActualResponse); err != nil {
+		return errors.New("Error in unmarshalling")
+	}
+	Limit := strconv.Itoa(len(unmarshalledActualResponse.Data))
+	if unmarshalledActualResponse.Count == "0" {
+		return errors.New("No Objects found in Mars Orbit")
+	} else if Limit != limit {
+		utils.LogInfo("Data limit did not match",Limit, limit)
+		return errors.New("Data limit did not match")
+	}
 	return nil
 }
 
+//get all close-approach data for Mars
+func Get_Cad_With_Diamater_Fullname( API string) error {
+	API = strings.Replace(API," ","%20",-1)
+	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
+	if err != nil {
+		return err
+	}
+	var unmarshalledActualResponse types.CadApiResponse
+	if err := utils.JsonUnmarshal(resposebody, &unmarshalledActualResponse); err != nil {
+		return errors.New("Error in unmarshalling")
+	}
+	if unmarshalledActualResponse.Count == "0"{
+		return errors.New("No Objects found in Mars Orbit")
+	}
+	return CheckDiamaterWithFullname(unmarshalledActualResponse)
+}
 
 //Check For 400 Bad Response
 func Verify_400_Response( API string ,expectedResponse interface{}) error {
@@ -121,4 +177,42 @@ func CheckSortBasedOnTimeStamp(response types.CadApiResponse) error {
 		}
 			utils.LogInfo("Data is sorted based on timestamp")
 		return nil
+}
+
+
+func CheckSortBasedOnDistance(response types.CadApiResponse) error {
+	var old_distance float64
+	for i, t := range response.Data[0]{
+		if i == 4{
+			old_distance, _ := strconv.ParseFloat(t, 32)
+			utils.LogInfo("Received 1st distance",old_distance)
+
+		}
+	}
+	for _, t := range response.Data {
+		distance, _ := strconv.ParseFloat(t[4], 32)
+		received_distance := distance
+		utils.LogInfo("Compairing new distance %f with old distance %f ", old_distance,received_distance)
+		if received_distance < old_distance  {
+			utils.LogInfo("Data is not sorted based on distance")
+			return errors.New("data is not sorted")
+		}
+		old_distance = distance
+
+	}
+	utils.LogInfo("Data is sorted based on distance")
+	return nil
+}
+
+func CheckDiamaterWithFullname(response types.CadApiResponse) error {
+	for _, t := range response.Data {
+		if t[13] == ""{
+			return errors.New("object fullname not avilable")
+		}
+		utils.LogInfo(t[11],t[12])
+		if t[11] == "" && t[12] == "" {
+			return errors.New("object diameter not avilable")
+		}
+	}
+	return nil
 }
