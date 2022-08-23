@@ -1,7 +1,5 @@
 package types
 
-// CadAPI : SBDB Close-Approach Data API
-var CadAPI = "https://ssd-api.jpl.nasa.gov/cad.api?"
 
 type Check400BadResponse struct {
 	MoreInfo string `json:"moreInfo"`

@@ -26,6 +26,7 @@ func Get_All_Cad_For_Mars( API string) error {
 	return nil
 }
 
+// check for zero object received
 func Get_Zero_Count_Results_Mars( API string) error {
 	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
 	if err != nil {
@@ -42,7 +43,7 @@ func Get_Zero_Count_Results_Mars( API string) error {
 	}
 }
 
-//get all close-approach data for Mars
+//get all close-approach data for Mars and check short based on date
 func Get_Cad_Sort_Date( API string) error {
 	API = strings.Replace(API," ","%20",-1)
 	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
@@ -60,7 +61,7 @@ func Get_Cad_Sort_Date( API string) error {
 	}
 }
 
-//get all close-approach data for Mars
+//get all close-approach data for Mars and check short based on distance
 func Get_Cad_Sort_Distance( API string) error {
 	API = strings.Replace(API," ","%20",-1)
 	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
@@ -77,6 +78,7 @@ func Get_Cad_Sort_Distance( API string) error {
 	return CheckSortBasedOnDistance(unmarshalledActualResponse)
 }
 
+//get all close-approach data for Mars and check for requested limit of data received
 func Get_All_Cad_With_Limit( API string,limit string) error {
 	API = strings.Replace(API," ","%20",-1)
 	API = API + "&limit="+limit
@@ -86,19 +88,19 @@ func Get_All_Cad_With_Limit( API string,limit string) error {
 	}
 	var unmarshalledActualResponse types.CadApiResponse
 	if err := utils.JsonUnmarshal(resposebody, &unmarshalledActualResponse); err != nil {
-		return errors.New("Error in unmarshalling")
+		return errors.New("error in unmarshalling")
 	}
 	Limit := strconv.Itoa(len(unmarshalledActualResponse.Data))
 	if unmarshalledActualResponse.Count == "0" {
-		return errors.New("No Objects found in Mars Orbit")
+		return errors.New("No objects found in Mars Orbit")
 	} else if Limit != limit {
-		utils.LogInfo("Data limit did not match",Limit, limit)
-		return errors.New("Data limit did not match")
+		utils.LogError("data limit did not match",Limit, limit)
+		return errors.New("data limit did not match")
 	}
 	return nil
 }
 
-//get all close-approach data for Mars
+//get all close-approach data for Mars and check objects name and diameter
 func Get_Cad_With_Diamater_Fullname( API string) error {
 	API = strings.Replace(API," ","%20",-1)
 	resposebody, err := utils.GetRestClientResponse(API, "GET", "")
@@ -155,6 +157,7 @@ func CHECKIsEqual(actual interface{}, expected interface{}) error {
 	return nil
 }
 
+//Check if Data received sorted based on timestamp
 func CheckSortBasedOnTimeStamp(response types.CadApiResponse) error {
 	var times time.Time
 	for i, t := range response.Data[0]{
@@ -179,12 +182,12 @@ func CheckSortBasedOnTimeStamp(response types.CadApiResponse) error {
 		return nil
 }
 
-
+//Check if Data received sorted based on distance
 func CheckSortBasedOnDistance(response types.CadApiResponse) error {
 	var old_distance float64
 	for i, t := range response.Data[0]{
 		if i == 4{
-			old_distance, _ := strconv.ParseFloat(t, 32)
+			old_distance, _ = strconv.ParseFloat(t, 32)
 			utils.LogInfo("Received 1st distance",old_distance)
 
 		}
@@ -194,7 +197,7 @@ func CheckSortBasedOnDistance(response types.CadApiResponse) error {
 		received_distance := distance
 		utils.LogInfo("Compairing new distance %f with old distance %f ", old_distance,received_distance)
 		if received_distance < old_distance  {
-			utils.LogInfo("Data is not sorted based on distance")
+			utils.LogError("Data is not sorted based on distance")
 			return errors.New("data is not sorted")
 		}
 		old_distance = distance
@@ -204,14 +207,15 @@ func CheckSortBasedOnDistance(response types.CadApiResponse) error {
 	return nil
 }
 
+//Fetch data and verify full-name and diameter
 func CheckDiamaterWithFullname(response types.CadApiResponse) error {
 	for _, t := range response.Data {
 		if t[13] == ""{
-			return errors.New("object fullname not avilable")
+			return errors.New("object's fullname not avilable")
 		}
 		utils.LogInfo(t[11],t[12])
 		if t[11] == "" && t[12] == "" {
-			return errors.New("object diameter not avilable")
+			return errors.New("object's diameter not avilable")
 		}
 	}
 	return nil

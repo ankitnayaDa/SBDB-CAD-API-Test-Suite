@@ -28,6 +28,8 @@ runGoTest(){
     cd tests/
     ls -ltr
     pwd
+    echo "--------------------------------------------------"
+    echo "Running Tests....."
     go test -json | go-test-report
 }
 

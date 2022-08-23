@@ -1,11 +1,9 @@
 FROM golang:1.16-alpine as download-dependencies
 
-RUN mkdir WebServer
-
-RUN apk update
-RUN apk add git
-RUN apk add build-base
-RUN apk add bash
+RUN apk update && \
+    apk add git && \
+    apk add build-base && \
+    apk add bash
 
 WORKDIR /sbdb-cad-api-test
 
