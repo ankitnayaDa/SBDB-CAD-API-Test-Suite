@@ -1,12 +1,13 @@
 package types
 
-
+//400 Bad Response structure
 type Check400BadResponse struct {
 	MoreInfo string `json:"moreInfo"`
 	Message  string `json:"message"`
 	Code     string `json:"code"`
 }
 
+//405 Method Not Allowed Response structure
 type CadApiResponse struct {
 	Signature struct {
 		Source  string `json:"source"`

@@ -116,13 +116,13 @@ func httpDo(client *http.Client, request *http.Request) (*http.Response, error) 
 	return nil, fmt.Errorf("%s %s giving up after %d attempts", request.Method, request.URL, defaultRetryMax+1)
 }
 
+//Check the response code. retry if status code is range from 500
 func checkForRetry(response *http.Response, err error) (bool, error) {
 
 	if err != nil {
 		return true, err
 	}
 
-	//Check the response code. retry if status code is range from 500
 	if response.StatusCode == 0 || response.StatusCode >= 500 {
 		return true, nil
 	}
@@ -186,6 +186,8 @@ func ToJSONString(payload interface{}) string {
 
 }
 
+
+//Unmarshal parses the JSON-encoded data
 func JsonUnmarshal(JSONStr string, unmarshalObj interface{}) error {
 	err := json.Unmarshal([]byte(JSONStr), &unmarshalObj)
 
