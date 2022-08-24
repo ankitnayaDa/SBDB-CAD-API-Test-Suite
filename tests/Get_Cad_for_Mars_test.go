@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func Test_All_Cad_For_Mars(t *testing.T) {
+func Test_Fetch_Verify_All_Cad_For_Mars(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view All Close Apporch object data for mars")
 	utils.LogInfo("***** Execution started *****")
@@ -18,7 +18,7 @@ func Test_All_Cad_For_Mars(t *testing.T) {
 	assert.Nil(t,libs.Get_All_Cad_For_Mars(CAD_API),"UNEXPECTED:User not able to view All Close Apporch object data for mars")
 }
 
-func Test_All_Cad_For_Mars_Based_Date_Sort_Date(t *testing.T) {
+func Test_Fetch_Cad_For_Mars_Based_Date_Verify_Sort_Date(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view All Close Apporch object data for mars based on specific dates with sort based on date")
 	utils.LogInfo("***** Execution started *****")
@@ -28,7 +28,7 @@ func Test_All_Cad_For_Mars_Based_Date_Sort_Date(t *testing.T) {
 	assert.Nil(t,libs.Get_Cad_Sort_Date(CAD_API),"UNEXPECTED:User not able to view All Close Apporch object data for mars based on specific dates with sort based on date ")
 }
 
-func Test_All_Cad_For_Mars_Based_Distance_Sort_Distance(t *testing.T) {
+func Test_Fetch_Cad_For_Mars_Based_Distance_Verify_Sort_Distance(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view All Close Apporch object data for mars based on specific maximun and minimum distances with sort based on dist")
 	utils.LogInfo("***** Execution started *****")
@@ -48,7 +48,7 @@ func Test_Zero_Count_Result_On_Mars(t *testing.T) {
 	assert.Nil(t,libs.Get_Zero_Count_Results_Mars(CAD_API),"UNEXPECTED:Data received")
 }
 
-func Test_All_NeaComet_For_Mars_Based_Distance(t *testing.T) {
+func Test_Fetch_NeaComet_For_Mars_Based_Distance(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view All NEAs and comets for mars based on distance")
 	utils.LogInfo("***** Execution started *****")
@@ -58,7 +58,7 @@ func Test_All_NeaComet_For_Mars_Based_Distance(t *testing.T) {
 	assert.Nil(t,libs.Get_Cad_Sort_Distance(CAD_API),"UNEXPECTED:User not able to view All NEAs and comets for mars based on distance")
 }
 
-func Test_All_Neo_For_Earth_Based_Distance(t *testing.T) {
+func Test_Fetch_Neo_For_Earth_Based_Distance_Verify_Sort_Distance(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view All NEOS for earth sorted based on distance")
 	utils.LogInfo("***** Execution started *****")
@@ -68,7 +68,7 @@ func Test_All_Neo_For_Earth_Based_Distance(t *testing.T) {
 	assert.Nil(t,libs.Get_Cad_Sort_Distance(CAD_API),"UNEXPECTED:User not able to view All NEOS for earth sorted based on distance")
 }
 
-func Test_All_NO_For_Earth_Based_Distance(t *testing.T) {
+func Test_Fetch_NO_For_Earth_Based_Distance_Verify_Sort_Date(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view All numbered-objects for earth sorted based on distance with filter based on dates")
 	utils.LogInfo("***** Execution started *****")
@@ -78,7 +78,7 @@ func Test_All_NO_For_Earth_Based_Distance(t *testing.T) {
 	assert.Nil(t,libs.Get_Cad_Sort_Date(CAD_API),"UNEXPECTED:User not able to view All numbered-objects for earth sorted based on distance with filter based on dates")
 }
 
-func Test_Particular_Object_For_Earth_Based_Distance(t *testing.T) {
+func Test_Fetch_Particular_Object_For_Earth_Based_Distance_Verify_Sort_Distance(t *testing.T) {
 
 	utils.LogInfo("Test description: Verify user able to view details for neo 2020 QW3 for earth sorted based on distance")
 	utils.LogInfo("***** Execution started *****")
