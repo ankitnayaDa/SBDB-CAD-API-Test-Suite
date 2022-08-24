@@ -1,5 +1,28 @@
 # SBDB-CAD-API-Test-Suite
-This repository contains API test automation suite Californian Institute of Technology’s (CIT) SBDB Close-Approach Data API
+This repository contains API test automation suite for Californian Institute of Technology’s (CIT) SBDB Close-Approach Data API.
+
+# Understanding API test automation Framework
+Test automation suite is written in go and use `go test` to run the test cases.
+
+
+`Docker` needs to be installed on test machine.
+
+
+This repository contains below folders
+
+
+
+```sh
+utils/ : contains utility functions
+runTestSuit.sh : to run the test automation suite
+libs/  : contains test case related functions
+types/ : contains types , variable and constant
+Dockerfile : text document that contains all the commands a user could call on the command line to assemble an image
+tests/  : contains test cases
+test.sh : this scripts to execute test and generate report in container
+go.mod  : collection of Go packages
+go.sum  : go.sum file lists down the checksum of direct and indirect dependency required 
+```
 
 # Getting Started With This Project
 To get started, clone this repo, and run `./runTestSuit.sh`.
